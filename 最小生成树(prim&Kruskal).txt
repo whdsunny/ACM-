@@ -1,0 +1,95 @@
+/*最小生成树  prim算法*/ 
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int inf=0x7fffffff;
+int dis[105];
+int vis[105];
+int mp[105][105];
+int n,x,y,z;
+void prim(){
+	int next,sum,min;
+	for(int i=1;i<=n;i++){
+		dis[i]=mp[i][1];
+	}
+	vis[1]=1;
+	for(int i=2;i<=n;i++){
+		min=inf;
+		next=i;
+		for(int j=2;j<=n;j++){
+			if(vis[j]==0&&dis[j]<min){
+				min=dis[j];
+				next=j;
+			}
+		}
+		sum+=min;
+		vis[next]=1;
+		for(int j=2;j<=n;j++){
+			if(dis[j]>mp[j][next]){
+				dis[j]=mp[j][next];
+			}
+		}
+	}
+	printf("%d\n",sum);
+}
+int main(){
+	cin>>n;
+	for(int i=1;i<=n;i++){
+		mp[i][i]=0;
+		vis[i]=0;
+	}
+	for(int i=1;i<=n;i++){
+		cin>>x>>y>>z;
+		mp[x][y]=mp[y][x]=z;
+	}
+	prim();
+	return 0;
+}
+
+
+/*最小生成树 Kruskal算法*/
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+int n,m,x,y;
+int bin[1010];
+struct node{
+	int start;
+	int end;
+	int dis;
+}num[1010];
+bool cmp(node a,node b){
+	if(a.dis<b.dis) return true;
+	else return false;
+}
+int find(int x){
+	int t;
+	int r=x;
+	if(x!=bin[x]) x=bin[x];
+	if(x!=bin[r]){
+		t=bin[r];
+		bin[r]=x;
+		r=t;
+	} 
+	return x;
+}
+void merge(int x,int y){
+	 int fx=find(x);
+	 int fy=find(y);
+	 if(fx!=fy){
+	 	bin[fx]=fy;
+	 }
+}
+int main(){
+	cin>>n>>m;
+	for(int i=1;i<=n;i++){
+		bin[i]=i;
+	}
+	while(m--){
+		cin>>x>>y;
+		merge(x,y);
+	}
+} 
